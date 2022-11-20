@@ -5,7 +5,7 @@ const reader = require('xlsx');
 
 // code to read the xlsx data
 
-const filePath = './XXXXX.xlsx'
+const filePath = './schools.xlsx'
 const workbook = reader.readFile(filePath);
 const worksheet = workbook.Sheets[workbook.SheetNames[0]];
 let data = reader.utils.sheet_to_json(worksheet);
@@ -14,17 +14,17 @@ let data = reader.utils.sheet_to_json(worksheet);
 async function emailscrape(){
 
       let driver = await new Builder().forBrowser("chrome").build();
-      await driver.get("https://portal.austinisd.org");
+      await driver.get("https://www.austinisd.org/directory");
 
 
 
-      for (let i=0; i < 130; i++) {
+      for (let i=0; i < 2; i++) {
         // load the school to search
         var searchString = data[i].school;
 
         // goes to the webpage to check
-
-        await driver.wait(until.elementLocated(By.id("UniqueId"))).then(el => el.sendKeys(searchString,Key.RETURN));
+        await driver.wait(until.elementLocated(By.id("edit-search-name"))).then(el => el.sendKeys("Campus/Department"));
+        await driver.wait(until.elementLocated(By.id("edit-searchvalue"))).then(el => el.sendKeys(searchString,Key.RETURN));
 
         await driver.wait(until.elementLocated(By.linkText(data[i].name))).then(el => el.click());
 
